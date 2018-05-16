@@ -6,13 +6,15 @@ namespace UnnamedSFRL
     class Program
     {
 
-        public const int Width = 80;
-        public const int Height = 25;
+        public const int ScreenWidth = 80;
+        public const int ScreenHeight = 50;
 
-        static void Main(string[] args)
+        public static Screens.Adventure AdventureScreen;
+
+        private static void Main()
         {
             // Setup the engine and creat the main window.
-            SadConsole.Game.Create("IBM.font", Width, Height);
+            SadConsole.Game.Create("C64.font", ScreenWidth, ScreenHeight);
 
             // Hook the start event so we can add consoles to the system.
             SadConsole.Game.OnInitialize = Init;
@@ -39,19 +41,21 @@ namespace UnnamedSFRL
             {
                 SadConsole.Settings.ToggleFullScreen();
             }
+            else if (SadConsole.Global.KeyboardState.IsKeyReleased(Microsoft.Xna.Framework.Input.Keys.Escape))
+            {
+                SadConsole.Game.Instance.Exit();
+            }
         }
 
         private static void Init()
         {
-            // Any custom loading and prep. We will use a sample console for now
+            AdventureScreen = new Screens.Adventure();
+            AdventureScreen.LoadMap(new Map(100, 100));
+            AdventureScreen.Player = new Entities.Player();
+            AdventureScreen.Player.Position = new Point(13, 7);
+            AdventureScreen.Map.Entities.Add(AdventureScreen.Player);
 
-            SadConsole.Console startingConsole = new Console(Width, Height);
-            startingConsole.FillWithRandomGarbage();
-            startingConsole.Fill(new Rectangle(3, 3, 27, 5), null, Color.Black, 0);
-            startingConsole.Print(6, 5, "Hello from SadConsole", ColorAnsi.CyanBright);
-
-            // Set our new console as the thing to render and process
-            SadConsole.Global.CurrentScreen = startingConsole;
+            SadConsole.Global.CurrentScreen.Children.Add(AdventureScreen);
         }
     }
 }
