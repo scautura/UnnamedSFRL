@@ -51,8 +51,10 @@ namespace UnnamedSFRL
         {
             AdventureScreen = new Screens.Adventure();
             AdventureScreen.LoadMap(new Map(100, 100));
-            AdventureScreen.Player = new Entities.Player();
-            AdventureScreen.Player.Position = new Point(13, 7);
+            AdventureScreen.Player = new Entities.Player
+            {
+                Position = new Point(13, 7)
+            };
             AdventureScreen.Map.Entities.Add(AdventureScreen.Player);
 
             SadConsole.Global.CurrentScreen.Children.Add(AdventureScreen);
